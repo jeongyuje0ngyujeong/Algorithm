@@ -1,34 +1,88 @@
 import java.util.*;
 
 class Solution {
+    public static StringTokenizer st;
     public static int count = 0;
 
-    public static int[] solution(String today, String[] terms, String[] privacies) {
-
-        HashMap<String, String> splitTerms = new HashMap<>();
-        for (int i = 0; i < terms.length; i++) {
-            splitTerms.put(terms[i].split(" ")[0], terms[i].split(" ")[1]);
-        }
-
-        List<Integer> list = new ArrayList<>();
+    public int[] solution(String today, String[] terms, String[] privacies) {
+        String[][] splitTerms = termsSet(terms);
+        StringBuilder sb = new StringBuilder();
 
         for (int i = 0; i < privacies.length; i++) {
-            String privacyDate = privacies[i].split(" ")[0];
-            String privacyTerms = privacies[i].split(" ")[1];
+            st = new StringTokenizer(privacies[i]);
+            String privacyDate = st.nextToken(privacies[i]);
+            String privacyTerms = st.nextToken(privacies[i]);
 
-            int expirationDate = Integer.parseInt(splitTerms.get(privacyTerms)) * 28;
-            int todaySum = (Integer.parseInt(today.split("\\.")[0]) * 28 * 12)
-                         + (Integer.parseInt(today.split("\\.")[1]) * 28)
-                         + Integer.parseInt(today.split("\\.")[2]);
-            int privacySum = (Integer.parseInt(privacyDate.split("\\.")[0]) * 28 * 12)
-                           + (Integer.parseInt(privacyDate.split("\\.")[1]) * 28)
-                           + expirationDate
-                           + Integer.parseInt(privacyDate.split("\\.")[2]);
+            for (int j = 0; j < terms.length; j++) {
+                if (splitTerms[i][0].equals(privacyTerms)) {
+                    st = new StringTokenizer(privacyDate, ".");
+                    int year = Integer.parseInt(st.nextToken());
+                    int month = Integer.parseInt(st.nextToken());
+                    int day = Integer.parseInt(st.nextToken());
 
-            if (todaySum >= privacySum) {
-                list.add(i + 1);
+                    if (day == 1) {
+                        day = 28;
+                        month = 12 % (month + 1 + Integer.parseInt(splitTerms[i][1]));
+                        year += 12 / (month + Integer.parseInt(splitTerms[i][1]));
+                        sb.append(dateCheck(today, year, month, day, i)).append(" ");
+
+                    } else {
+                        day -= 1;
+                        month = 12 % (month + Integer.parseInt(splitTerms[i][1]));
+                        year += 12 / (month + Integer.parseInt(splitTerms[i][1]));
+                        sb.append(dateCheck(today, year, month, day, i)).append(" ");
+
+                    }
+
+                    break;
+                }
             }
         }
-        return list.stream().mapToInt(Integer::intValue).toArray();
+
+        int[] answer = new int[count];
+        int idx = 0;
+        String sbStr = String.valueOf(sb);
+        String[] sbStrArr = sbStr.split(" ");
+        for (int i = 0; i < sbStrArr.length; i++) {
+            if (sbStrArr[i].equals("-1")) continue;
+            answer[idx++] = Integer.parseInt(sbStrArr[i]);
+        }
+
+        return answer;
     }
+
+    private String[][] termsSet(String[] terms) {
+        String[][] splitTerms = new String[terms.length][2];
+        for (int i = 0; i < terms.length; i++) {
+            st = new StringTokenizer(terms[i]);
+            splitTerms[i][0] = st.nextToken();
+            splitTerms[i][1] = st.nextToken();
+
+        }
+        return splitTerms;
+    }
+
+    private int dateCheck(String today, int year, int month, int day, int num) {
+        st = new StringTokenizer(today, ".");
+        int todayYear = Integer.parseInt(st.nextToken());
+        int todayMonth = Integer.parseInt(st.nextToken());
+        int todayDay = Integer.parseInt(st.nextToken());
+
+        if (todayYear > year) {
+            count++;
+            return num + 1;
+
+        } else if (todayYear == year && todayMonth > month) {
+            count++;
+            return num + 1;
+
+        } else if (todayDay == year && todayMonth == month && todayDay > day) {
+            count++;
+            return num + 1;
+
+        }
+
+        return -1;
+    }
+
 }
