@@ -14,10 +14,15 @@ public class Main {
             memo[i] = (memo[i - 1]).add(two.multiply(memo[i - 2]));
         }
 
+        StringBuilder sb = new StringBuilder();
         String n;
         while ((n = br.readLine())!= null) {
             int width = Integer.parseInt(n);
-            System.out.println(memo[width]);
+            sb.append(memo[width]).append("\n");
+
         }
+
+        System.out.println(sb);
+
     }
 }
