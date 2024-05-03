@@ -4,39 +4,23 @@ public class Main {
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         int num = Integer.parseInt(br.readLine());
+        if (num < 100) {
+            System.out.println(num);
 
-        boolean[] memo = new boolean[1001];
-        for (int i = 0; i < 100; i++) {
-            memo[i] = true;
-        }
+        } else if (num == 1000) {
+            System.out.println(144);
 
-        if (num >= 100) {
-            for (int i = 100; i <= num ; i++) {
-                String strNum = String.valueOf(i);
-                int strNumLen = strNum.length();
-                int[] arr = new int[strNumLen];
-
-                for (int j = 0; j < strNumLen; j++) {
-                    arr[j] = (strNum.charAt(j) - '0');
-                }
-
-                int d = arr[1] - arr[0];
-                boolean isTrue = false;
-                for (int j = 2; j < strNumLen; j++) {
-                    if (arr[j] - arr[j - 1] != d) {
-                        isTrue = false;
-                        break;
-                    } else isTrue = true;
-                }
-
-                if (isTrue) memo[i] = true;
+        } else {
+            int cnt = 0;
+            for (int i = 100; i <= num; i++) {
+                int a = i / 100;
+                int b = (i / 10) % 10;
+                int c = i % 10;
+                int d1 = b - a;
+                int d2 = c - b;
+                if (d1 == d2) cnt++;
             }
+            System.out.println(99 + cnt);
         }
-        int cnt = 0;
-        for (int i = 1; i <= num; i++) {
-            if (memo[i]) cnt++;
-        }
-
-        System.out.println(cnt);
     }
 }
