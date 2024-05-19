@@ -1,0 +1,53 @@
+import java.io.*;
+
+public class Swea_1954 {
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        int testCase = Integer.parseInt(br.readLine());
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < testCase; i++) {
+            sb.append("#").append(i + 1).append("\n");
+            int n = Integer.parseInt(br.readLine());
+            int[][] answers = snailNum(n);
+            for (int[] answer : answers) {
+                for (int a : answer) {
+                    sb.append(a).append(" ");
+                }
+                sb.append("\n");
+            }
+        }
+        System.out.println(sb);
+    }
+
+    private static int[][] snailNum(int n) {
+        int[][] answers = new int[n][n];
+        int cnt = 1;
+        int check = 0;
+        int max = (int) Math.pow(n, 2);
+        while (cnt <= max) {
+            for (int i = 0; i < n; i++) {
+                if (answers[check][i] != 0) continue;
+                answers[check][i] = cnt++;
+            }
+
+            for (int i = 1; i < n; i++) {
+                if (answers[i][n - 1] != 0) continue;
+                answers[i][n - 1] = cnt++;
+            }
+
+            for (int i = n - 2; i >= 0; i--) {
+                if (answers[n - 1][i] != 0) continue;
+                answers[n - 1][i] = cnt++;
+            }
+
+            for (int i = n - 2; i >= 1; i--) {
+                if (answers[i][check] != 0) continue;
+                answers[i][check] = cnt++;
+            }
+            n--;
+            check++;
+        }
+
+        return answers;
+    }
+}
