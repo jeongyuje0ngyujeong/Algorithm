@@ -1,0 +1,89 @@
+//휴일 찾기
+import java.util.*;
+
+public class Solution {
+    public int solution(int X, int[][] H) {
+        int year = 31 + 28 + 31 + 30 + 31 + 30 + 31 + 31 + 30 + 31 + 30 + 31;
+        int saturday = 0;
+        int sunday = 0;
+        if (X < 6) {
+            saturday = 7 - X;
+            sunday = saturday + 1;
+
+        } else if (X == 6) {
+            saturday = 1;
+            sunday = 2;
+
+        } else {
+            sunday = 1;
+            saturday = sunday + 6;
+
+        }
+
+        int dayOffCnt = H.length;
+        int answer = 0;
+        ArrayList<Integer> dayOff = new ArrayList<>();
+        int idx = 0;
+
+        for (int i = 0; i < dayOffCnt; i++) {
+
+            if (H[i][0] == 1) {
+                dayOff.add(H[i][1]);
+
+            } else if (H[i][0] == 2) {
+                dayOff.add(H[i][1] + 31);
+
+            } else if (H[i][0] == 3) {
+                dayOff.add(H[i][1] + 31 + 28);
+
+            } else if (H[i][0] == 4) {
+                dayOff.add(H[i][1] + 31 + 28 + 31);
+
+            } else if (H[i][0] == 5) {
+                dayOff.add(H[i][1] + 31 + 28 + 31 + 30);
+
+            } else if (H[i][0] == 6) {
+                dayOff.add(H[i][1] + 31 + 28 + 31 + 30 + 31);
+
+            } else if (H[i][0] == 7) {
+                dayOff.add(H[i][1] + 31 + 28 + 31 + 30 + 31 + 30);
+
+            }else if (H[i][0] == 8) {
+                dayOff.add(H[i][1] + (year - 31 - 30 - 31 - 30 - 31));
+
+            } else if (H[i][0] == 9) {
+                dayOff.add(H[i][1] + (year - 31 - 30 - 31 - 30));
+
+            } else if (H[i][0] == 10) {
+                dayOff.add(H[i][1] + (year - 31 - 30 - 31));
+
+            } else if (H[i][0] == 11) {
+                dayOff.add(H[i][1] + (year - 31 - 30));
+
+            } else if (H[i][0] == 12) {
+                dayOff.add(H[i][1] + (year - 31));
+
+            }
+
+        }
+
+        idx = 0;
+        for (int i = saturday; i <= year; i += 7) {
+            if (dayOff.contains(i)) {
+                continue;
+            }
+            answer++;
+        }
+
+        idx = 0;
+        for (int i = sunday; i <= year; i += 7) {
+            if (dayOff.contains(i)) {
+                continue;
+            }
+            answer++;
+        }
+
+        return answer + dayOffCnt;
+
+    }
+}
