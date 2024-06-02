@@ -20,12 +20,12 @@ public class Main {
             return;
         }
 
-        int start = 0;
+        int start = 1;
         int end = totalBudget;
         int check = (start + end) / 2;
         sum = 0;
 
-        while (start < check && check < end) {
+        while (start <= end) {
             sum = 0;
             for (int i = 0; i < cityNum; i++) {
                 if (budget[i] <= check) {
@@ -39,11 +39,11 @@ public class Main {
             }
 
             if (sum > totalBudget) {
-                end = check;
+                end = check - 1;
                 check = (start + end) / 2;
 
             } else if (sum < totalBudget) {
-                start = check;
+                start = check + 1;
                 check = (start + end) / 2;
 
             } else {
