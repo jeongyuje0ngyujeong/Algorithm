@@ -16,7 +16,7 @@ public class Main {
 
         Arrays.sort(woods);
 
-        long start = 0;
+        long start = woods[size - 1] - std;
         long end = woods[size - 1] - 1;
         long point = (start + end) / 2;
         long check = 0;
