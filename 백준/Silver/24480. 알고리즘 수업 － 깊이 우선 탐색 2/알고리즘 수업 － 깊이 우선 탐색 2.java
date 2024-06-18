@@ -3,10 +3,9 @@ import java.util.*;
 
 public class Main {
     private static ArrayList<Integer>[] graph;
-    private static boolean[] isVisited;
+    private static int[] isVisited;
     private static int node = 0;
     private static int cnt = 1;
-    private static int[] answer;
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -17,8 +16,7 @@ public class Main {
         int start = Integer.parseInt(st.nextToken());
 
         graph = new ArrayList[node + 1];
-        answer = new int[node + 1];
-        isVisited = new boolean[node + 1];
+        isVisited = new int[node + 1];
         for (int i = 0; i < node + 1; i++) {
             graph[i] = new ArrayList<>();
 
@@ -37,23 +35,22 @@ public class Main {
 
         StringBuilder sb = new StringBuilder();
         for (int i = 1; i <= node; i++) {
-            sb.append(answer[i]).append("\n");
+            sb.append(isVisited[i]).append("\n");
         }
 
         System.out.println(sb);
     }
 
     private static void dfs(int start) {
-        if (isVisited[start]) {
+        if (isVisited[start] != 0) {
             return;
         }
 
-        isVisited[start] = true;
-        answer[start] = cnt++;
+        isVisited[start] = cnt++;
         Collections.sort(graph[start], Collections.reverseOrder());
 
         for (int i = 0; i < graph[start].size(); i++) {
-            if (!isVisited[graph[start].get(i)]) {
+            if (isVisited[graph[start].get(i)] == 0) {
                 dfs(graph[start].get(i));
             }
         }
