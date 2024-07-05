@@ -1,8 +1,12 @@
 #A+B, A-B, A*B, A/B(몫), A%B(나머지)
-A, B = map(int, input().split())
+import sys
 
-print(A + B)
-print(A - B)
-print(A * B)
-print(A // B)
-print(A % B)
+A, B = map(str, sys.stdin.readline().split())
+A = int(A)
+B = int(B)
+
+sys.stdout.write(str(A + B) + "\n")
+sys.stdout.write(str(A - B)+ "\n")
+sys.stdout.write(str(A * B)+ "\n")
+sys.stdout.write(str(A // B)+ "\n")
+sys.stdout.write(str(A % B))
