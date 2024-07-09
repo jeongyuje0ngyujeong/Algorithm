@@ -6,8 +6,6 @@ if __name__ == "__main__":
     array = list(map(int, input().split()))
 
 
-    array.sort()
-
     start = 1
     end = max(array)
     mid = (start + end) // 2
