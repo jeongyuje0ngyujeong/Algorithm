@@ -1,8 +1,10 @@
-num = int(input())
+import sys
+
+num = int(sys.stdin.readline())
 stack = []
 ans_list = []
 for i in range(num):
-    check = list(map(str, input().split()))
+    check = list(map(str, sys.stdin.readline().split()))
 
     if len(check) != 1:
         stack.append(int(check[1]))
@@ -33,4 +35,4 @@ for i in range(num):
                 ans_list.append(-1)
 
 for ans in ans_list:
-    print(ans)
+    sys.stdout.write(str(ans) + "\n")
