@@ -1,19 +1,23 @@
 import sys
 
-num = int(sys.stdin.readline())
-checkNum = int(num)
+N = sys.stdin.readline().strip()
+origin = N
 cnt = 0
 
-while True:
-    cnt += 1
+if int(N) < 10:
+    N = '0' + N
+A = N[0]
+B = N[1]
+sum = f'{int(A)+int(B)}'
+N = B + sum[-1]
 
-    if checkNum < 10:
-        checkNum = int(str(checkNum) + str(checkNum))
+cnt+=1
 
-    else :
-        checkNum = int(str(checkNum % 10) + str(((checkNum // 10) + (checkNum % 10)) % 10))
+while int(N) != int(origin):
+    A = N[0]
+    B = N[1]
+    sum = f'{int(A)+int(B)}'
+    N = B + sum[-1]
+    cnt+=1
 
-    if checkNum == num:
-        break
-
-sys.stdout.write(str(cnt))
+print(cnt)
