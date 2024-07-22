@@ -1,11 +1,19 @@
 import sys
 
 size = int(sys.stdin.readline())
-fibo = [0] * (size + 1)
-fibo[0] = 0
-fibo[1] = 1
+memo = [-1] * (size + 1)
+memo[0] = 0
+memo[1] = 1
 
-for i in range(2, size + 1):
-    fibo[i] = fibo[i - 1] + fibo[i - 2]
 
-sys.stdout.write(str(fibo[size]))
+def fibo(idx: int) -> int:
+    if memo[idx] >= 0:
+        return memo[idx]
+
+    if idx >= 2:
+        memo[idx] = fibo(idx - 1) + fibo(idx - 2)
+
+    return memo[idx]
+
+
+sys.stdout.write(str(fibo(size)))
