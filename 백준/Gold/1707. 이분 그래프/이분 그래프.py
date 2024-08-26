@@ -1,49 +1,48 @@
 import sys
+from collections import deque
 
-sys.setrecursionlimit(10 ** 5)
-graph = [[]]
-is_visited = []
 test_case = int(sys.stdin.readline())
-answer = [''] * test_case
-
-
-def dfs(num: int, check_group: int) -> bool:
-    is_visited[num] = check_group
-
-    for i in graph[num]:
-        if not is_visited[i]:
-            result = dfs(i, -check_group)
-            if not result:
-                return False
-
-        elif is_visited[i] == check_group:
-            return False
-
-    return True
-
-
-for i in range(test_case):
+for _ in range(test_case):
     vertex, edge = map(int, sys.stdin.readline().split())
-    graph = [[] for _ in range(vertex + 1)]
-    is_visited = [0] * (vertex + 1)
+
+    graph = [[]for _ in range(vertex + 1)]
+    is_visited = [False] * (vertex + 1)
+    is_visited[0] = True
 
     for _ in range(edge):
-        s, e = map(int, sys.stdin.readline().split())
-        graph[s].append(e)
-        graph[e].append(s)
+        a, b = map(int, sys.stdin.readline().split())
+        graph[a].append(b)
+        graph[b].append(a)
 
-    result = True
-    for j in range(1, vertex + 1):
-        if not is_visited[j]:
-            result = dfs(j, 1)
-            if not result:
+    def bfs(start: int) -> bool:
+        color = [0] * (vertex + 1)
+
+        queue = deque()
+        queue.append(start)
+        is_visited[start] = True
+        color[start] = 1
+
+        while queue:
+            check = queue.popleft()
+
+            for val in graph[check]:
+                if color[check] == color[val]:
+                    return False
+
+                if not is_visited[val]:
+                    queue.append(val)
+                    is_visited[val] = True
+                    color[val] = color[check] + 1
+        return True
+
+    is_binary_graph = True
+    for i in range(vertex):
+        if not is_visited[i]:
+            if not bfs(i):
+                sys.stdout.write("NO\n")
+                is_binary_graph = False
                 break
 
-    if result:
-        answer[i] = "YES"
-    else:
-        answer[i] = "NO"
+    if is_binary_graph:
+        sys.stdout.write("YES\n")
 
-
-for i in answer:
-    sys.stdout.write(str(i) + "\n")
