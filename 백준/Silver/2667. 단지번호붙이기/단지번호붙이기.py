@@ -1,53 +1,45 @@
-import collections
 import sys
+from collections import deque
 
-row = col = int(sys.stdin.readline())
-graph = [[] for _ in range(row)]
-is_visited = [[False] * row for _ in range(row)]
-for i in range(row):
-    graph[i] = list(map(int, sys.stdin.readline().strip()))
-apt_sum = 0
-house_num = [0] * (row * col)
+map_size = int(sys.stdin.readline().strip())
+apt_map = [[] for _ in range(map_size)]
+for i in range(map_size):
+    apt_map[i] = list(map(int, sys.stdin.readline().strip()))
+is_visited = [[False for _ in range(map_size)]for _ in range(map_size)]
+queue = deque()
+total_cnts = 0
+house_cnts = []
 
+for i in range(map_size):
+    for j in range(map_size):
+        if apt_map[i][j] == 0 or is_visited[i][j]:
+            continue
+        house_cnt = 0
+        queue.append((i, j))
+        is_visited[i][j] = True
+        house_cnt += 1
 
-def bfs(start_row: int, start_col: int):
-    global apt_sum
-    queue = collections.deque()
-    queue.append([start_row, start_col])
-    house_num[apt_sum] += 1
-    is_visited[start_row][start_col] = True
+        while queue:
+            cur_y, cur_x = queue.popleft()
+            dx = [0, 0, -1, 1]
+            dy = [-1, 1, 0, 0]
 
-    while queue:
-        current_location = queue.popleft()
-        current_x = current_location[1]
-        current_y = current_location[0]
+            for k in range(4):
+                move_y = cur_y + dy[k]
+                move_x = cur_x + dx[k]
+                if move_x < 0 or move_x >= map_size or 0 > move_y or move_y >= map_size:
+                    continue
 
-        dx = [0, 0, -1, 1]
-        dy = [-1, 1, 0, 0]
+                if apt_map[move_y][move_x] == 1 and not is_visited[move_y][move_x]:
+                    queue.append((move_y, move_x))
+                    is_visited[move_y][move_x] = True
+                    house_cnt += 1
 
-        for i in range(4):
-            move_x = current_x + dx[i]
-            move_y = current_y + dy[i]
+        house_cnts.append(house_cnt)
+        total_cnts += 1
 
-            if move_x >= col or move_x < 0 or move_y >= row or move_y < 0:
-                continue
+house_cnts.sort()
 
-            if not is_visited[move_y][move_x] and graph[move_y][move_x] == 1:
-                is_visited[move_y][move_x] = True
-                queue.append([move_y, move_x])
-
-                house_num[apt_sum] += 1
-
-    apt_sum += 1
-
-
-for i in range(row):
-    for j in range(row):
-        if not is_visited[i][j] and graph[i][j] != 0:
-            bfs(i, j)
-
-sys.stdout.write(str(apt_sum) + "\n")
-house_num.sort()
-for h in house_num:
-    if h != 0:
-        sys.stdout.write(str(h) + "\n")
+print(total_cnts)
+for house in house_cnts:
+    print(house)
