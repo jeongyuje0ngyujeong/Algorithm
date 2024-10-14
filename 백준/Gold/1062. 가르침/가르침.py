@@ -1,5 +1,4 @@
 import sys
-sys.setrecursionlimit(1000000)
 
 words_num, alphabet_num = map(int, sys.stdin.readline().strip().split())
 
@@ -11,7 +10,6 @@ if alphabet_num == 26:
     print(words_num)
     exit()
 
-# words = [list(input().rstrip()) for _ in range(words_num)]
 words = []
 for i in range(words_num):
     word = sys.stdin.readline().strip()
