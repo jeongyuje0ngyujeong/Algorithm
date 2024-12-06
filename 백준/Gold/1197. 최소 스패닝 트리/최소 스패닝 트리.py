@@ -1,47 +1,37 @@
 import sys
 
-vertex, edge = map(int, (sys.stdin.readline().split()))
-edges = [[]for _ in range(edge)]
-union_find = [i for i in range(vertex + 1)]
+sys.setrecursionlimit(10**6)
+
+vertex, edge = map(int, sys.stdin.readline().strip().split())
+parent = [i for i in range(vertex + 1)]
+
+graph = []
+for _ in range(edge):
+    a, b, cost = map(int, sys.stdin.readline().strip().split())
+    graph.append((cost, a, b))
+graph.sort()
+
+
+def find(x: int) -> int:
+    if parent[x] == x:
+        return x
+
+    parent[x] = find(parent[x])
+    return parent[x]
 
 
 def union(a: int, b: int) -> None:
-    a = find(a)
-    b = find(b)
+    root_a = find(a)
+    root_b = find(b)
 
-    union_find[max(a, b)] = min(a, b)
-
-
-def find(idx: int) -> int:
-    if union_find[idx] == idx:
-        return idx
-
-    union_find[idx] = find(union_find[idx])
-    return union_find[idx]
+    parent[max(root_a, root_b)] = min(root_a, root_b)
 
 
-for i in range(edge):
-    edges[i] = list(map(int, sys.stdin.readline().split()))
+answer = 0
+for g in graph:
+    cost, vertex_a, vertex_b = g
+    if find(vertex_a) != find(vertex_b):
+        union(vertex_a, vertex_b)
+        answer += cost
 
-
-def same_parent(a: int, b: int) -> bool:
-    return find(a) == find(b)
-
-
-edges.sort(key=lambda x: x[2])
-ans_sum = 0
-
-for i in range(edge):
-    start = edges[i][0]
-    end = edges[i][1]
-    weight = edges[i][2]
-
-    if not same_parent(union_find[start], union_find[end]):
-        union(union_find[start], union_find[end])
-        ans_sum += weight
-
-sys.stdout.write(str(ans_sum))
-
-
-
-
+print(answer)
