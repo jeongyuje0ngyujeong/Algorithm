@@ -1,21 +1,17 @@
 import sys
 
-size = int(sys.stdin.readline())
-num_array = [0] + list(map(int, sys.stdin.readline().strip().split()))
-check_arr = sorted(list(set(num_array)))
-LCS = [[0] * (size + 1) for _ in range(len(check_arr))]
-row = len(check_arr)
-col = len(num_array)
+size = int(sys.stdin.readline()) + 1
+nums = [0] + list(map(int, sys.stdin.readline().strip().split()))
+dp = [0] * size
+pre = 0
 
-for i in range(row):
-    for j in range(col):
-        if check_arr[i] == 0 or num_array[j] == 0:
-            continue
+for i in range(1, size):
+    max_num = 0
 
-        elif check_arr[i] == num_array[j]:
-            LCS[i][j] = LCS[i - 1][j - 1] + 1
+    for j in range(1, i):
+        if nums[j] < nums[i] and max_num < dp[j]:
+            max_num = dp[j]
 
-        else:
-            LCS[i][j] = max(LCS[i - 1][j], LCS[i][j - 1])
+    dp[i] = max_num + 1
 
-sys.stdout.write(str(LCS[row - 1][col - 1]))
+print(max(dp))
