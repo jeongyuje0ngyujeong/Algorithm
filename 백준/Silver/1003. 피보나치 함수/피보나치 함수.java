@@ -1,30 +1,26 @@
+import java.util.*;
 import java.io.*;
 
 public class Main {
-    private static Integer[][] memo = new Integer[41][2];
-
-    public static void main(String[] args) throws IOException{
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        int testNum = Integer.parseInt(br.readLine());
-        StringBuilder sb = new StringBuilder();
-        memo[0][0] = 1;
-        memo[0][1] = 0;
-        memo[1][0] = 0;
-        memo[1][1] = 1;
-
-        for (int i = 0; i < testNum; i++) {
-            int n = Integer.parseInt(br.readLine());
-            fibo(n);
-            sb.append(memo[n][0]).append(" ").append(memo[n][1]).append("\n");
-        }
-        System.out.println(sb);
-    }
-
-    private static Integer[] fibo(int n) {
-        for (int i = 2; i <= n; i++) {
-            memo[i][0] = memo[i - 1][0] + memo[i - 2][0];
-            memo[i][1] = memo[i - 1][1] + memo[i - 2][1];
-        }
-        return memo[n];
-    }
+     public static void main(String[] args) throws IOException {
+         int[][] fibo = new int[41][2];
+         fibo[0][0] = 1;
+         fibo[1][1] = 1;
+         
+         for (int i = 2; i < fibo.length; i++) {
+             fibo[i][0] = fibo[i - 1][0] + fibo[i - 2][0];
+             fibo[i][1] = fibo[i - 1][1] + fibo[i - 2][1];
+         }
+         
+         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+         StringBuilder sb = new StringBuilder();
+         int testCase = Integer.parseInt(br.readLine());
+         
+         for (int i = 0; i < testCase; i++) {
+             int num = Integer.parseInt(br.readLine());
+             sb.append(fibo[num][0]).append(" ").append(fibo[num][1]);
+             System.out.println(sb);
+             sb.setLength(0);
+         }
+     }
 }
