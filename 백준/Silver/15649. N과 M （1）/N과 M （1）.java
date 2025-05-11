@@ -1,39 +1,39 @@
 import java.util.*;
 import java.io.*;
 
-public class Main {
-    private static int[] numArr;
-    private static boolean[] isVisited;
-    private static StringBuilder sb = new StringBuilder();
+public class Main{
+    static StringBuilder sb = new StringBuilder();
+    static ArrayList<Integer> numList = new ArrayList<>();
+    static boolean[] isVisited;
+    static int maxNum = 0;
+    static int length = 0;
     
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        String str = br.readLine();
-        int num = Integer.parseInt(str.split(" ")[0]);
-        int size = Integer.parseInt(str.split(" ")[1]);
+        StringTokenizer st = new StringTokenizer(br.readLine());
         
-        numArr = new int[size];
-        isVisited = new boolean[num];
-        
-        dfs(num, size, 0);
+        maxNum = Integer.parseInt(st.nextToken());
+        length = Integer.parseInt(st.nextToken());
+        isVisited = new boolean[maxNum + 1];
+        printNum(0);
         System.out.println(sb);
     }
-    
-    private static void dfs(int num, int size, int depth) {
-        if (depth == size) {
-            for (int a : numArr) {
-                sb.append(a).append(" ");
+    public static void printNum(int depth) {
+        if (depth >= length) {
+            for (int num : numList) {
+                sb.append(num).append(" ");
             }
             sb.append("\n");
             return;
         }
         
-        for(int i = 0; i < num; i++) {
+        for (int i = 1; i <= maxNum; i++) {
             if (!isVisited[i]) {
                 isVisited[i] = true;
-                numArr[depth] = i + 1;
-                dfs(num, size, depth + 1);
+                numList.add(i);
+                printNum(depth + 1);
                 isVisited[i] = false;
+                numList.remove(numList.size() - 1);
             }
         }
     }
